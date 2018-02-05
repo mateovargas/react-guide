@@ -1,7 +1,7 @@
 import React, { Component } from 'react' ; 
 import './App.css';
 //allows for psuedostyles. styleroot allows for media transformations
-import Radium, { StyleRoot } from 'radium';
+//import Radium, { StyleRoot } from 'radium';
 import Person from './Person/Person.js'; //imports person component from the file. Needs an uppercase name.
 
 
@@ -93,6 +93,7 @@ class App extends Component {
     //WITHOUT RADIUM PACKAGE. Wrap 
     //them in pseudoselectors to be able
     //to write pseudoclasses in javascript.
+    //HOVER ONLY WITH RADIUM.
     const style = {
 
       backgroundColor: 'green',
@@ -101,10 +102,10 @@ class App extends Component {
       border: '1px solid blue',
       padding: '8px',
       cursor: 'pointer',
-      ':hover': {
+      /**':hover': {
         backgroundColor: 'lightgreen',
         color: 'black'
-      }
+      }**/
 
     };
 
@@ -134,10 +135,11 @@ class App extends Component {
 
       style.backgroundColor = 'red';
       //use square brackets because :hover is a string.
-      style[':hover'] = {
+      //NEEDS RADIUM
+      /**style[':hover'] = {
         backgroundColor: 'lightred',
         color: 'black'
-      }
+      }**/
 
     }
     //array of strings that defines CSS classes.
@@ -161,9 +163,8 @@ class App extends Component {
 
     //outputs the list persons as a variable
     //wrapped in <StyleRoot> to allow for media query
-    //transformation.
+    //transformation. RADIUM ONLY.
     return (
-      <StyleRoot>
         <div className="App">
           <h1>Hi, I'm a React App!</h1>
           <p className={classes.join(' ')}>This is really working!</p>
@@ -174,7 +175,6 @@ class App extends Component {
           </button>
           {persons}
         </div>
-      </StyleRoot>
     );
     //jsx is not html, but works just like it
     //creates a div wrapped around an h1 element with className 'App', which is the same as above.
@@ -183,4 +183,4 @@ class App extends Component {
 }
 //wraps app in radium, calling it a higher order component.
 //can be used on class and fucntional components.
-export default Radium(App);
+export default App;
