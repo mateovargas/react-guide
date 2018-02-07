@@ -1,22 +1,50 @@
-import React, { Component } from 'react' ; 
-import './App.css';
+import React, { Component } from 'react' ;
+//classes is a javascript object that has access to css styles in app.css
+import classes from './App.css';
 //allows for psuedostyles. styleroot allows for media transformations
 //import Radium, { StyleRoot } from 'radium';
-import Person from './Person/Person.js'; //imports person component from the file. Needs an uppercase name.
-
+//import Person from '../components/Persons/Person/Person'; //imports person component from the file. Needs an uppercase name.
+//import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary'
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
   //state is managed from inside component. only available in components that extend component
   //use state with care! using it too much makes it unpredictable as it scales.
   //If state changes, it will lead react to update the DOM.
-  state = {
+  //THIS CLASS IS FOR MANAGING AND MANIPULATING STATE.
+  //Send the information to components to actually display changes.
+  constructor(props){
+    super(props);
+    console.log('App.js inside constructor', props);
+    this.state = {
       persons: [
-        {id: 0, name: 'Mat', age: '26'}, 
-        {id: 1, name: 'Elvis', age: '25'}, 
-        {id: 2, name: 'Alex', age: '27'}
+        { id: 0, name: 'Mat', age: '26' },
+        { id: 1, name: 'Elvis', age: '25' },
+        { id: 2, name: 'Alex', age: '27' }
       ],
       showPersons: false
-  };
+    };
+  }
+
+  componentWillMount(){
+
+    console.log('App.js inside component will mount.');
+
+  }
+
+  componentDidMount(){
+    console.log('App.js inside did mount.');
+  }
+  /** Setting state like this only works in modern projects.
+  state = {
+    persons: [
+      { id: 0, name: 'Mat', age: '26' },
+      { id: 1, name: 'Elvis', age: '25' },
+      { id: 2, name: 'Alex', age: '27' }
+    ],
+    showPersons: false
+  };**/
 
   //USE ARROW FUNCTIONS TO ENSURE this ALWAYS REFERS TO APP CLASS
   //On button Click funtion. You can use bind at function call
@@ -88,13 +116,13 @@ class App extends Component {
   };
 
   render() {
-
+    console.log('App.js inside render.');
     //DOES NOT ALLOW FOR PSEUDOSELECTORS
     //WITHOUT RADIUM PACKAGE. Wrap 
     //them in pseudoselectors to be able
     //to write pseudoclasses in javascript.
     //HOVER ONLY WITH RADIUM.
-    const style = {
+    /**const style = {
 
       backgroundColor: 'green',
       color: 'white',
@@ -102,38 +130,34 @@ class App extends Component {
       border: '1px solid blue',
       padding: '8px',
       cursor: 'pointer',
-      /**':hover': {
+      ':hover': {
         backgroundColor: 'lightgreen',
         color: 'black'
-      }**/
+      }
 
-    };
+    };**/
 
     let persons = null;
+    
     //javascript to take what is in person, check if
     //it is toggled, then display all the people
     //if you use more than one function in es6 arrow
     //wrap the args in parentheses. adjusts
     //style if persons is showing as well.
+    //ErrorBoundary is a higher order component that
+    //will display error if there is one.
     if(this.state.showPersons){
 
       persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person 
-                      name={person.name}
-                      age={person.age}
-                      click={this.deletePersonHandler.bind(this, index)}
-                      //can also use
-                      //click={() => this.deletePersonHandler(index)}
-                      key={person.id}
-                      change={(event) => this.nameChangedHandler(event, person.id)}
-                   />
-          })}
-        </div>
+         <Persons 
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler}
+         />
       );
 
-      style.backgroundColor = 'red';
+      
+      //style.backgroundColor = 'red';
       //use square brackets because :hover is a string.
       //NEEDS RADIUM
       /**style[':hover'] = {
@@ -149,30 +173,18 @@ class App extends Component {
 
     //in this case, pushes styles depending on length of persons
     //then joins WHEN IN THE JSX function
-    const classes = [];
-    if(this.state.persons.length <= 2){
 
-      classes.push('red');
-
-    }
-    if(this.state.persons.length <= 1){
-
-      classes.push('bold');
-
-    }
 
     //outputs the list persons as a variable
     //wrapped in <StyleRoot> to allow for media query
     //transformation. RADIUM ONLY.
     return (
-        <div className="App">
-          <h1>Hi, I'm a React App!</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button
-            style={style} 
-            onClick={this.togglePersonsHandler}>
-            Toggle Persons
-          </button>
+        <div className={classes.App}>
+          <Cockpit 
+            showPersons={this.state.showPersons}
+            persons={this.state.persons}
+            clicked={this.togglePersonsHandler}
+          />
           {persons}
         </div>
     );
