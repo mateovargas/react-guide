@@ -1,4 +1,4 @@
-import React, { Component } from 'react' ;
+import React, { PureComponent } from 'react' ;
 //classes is a javascript object that has access to css styles in app.css
 import classes from './App.css';
 //allows for psuedostyles. styleroot allows for media transformations
@@ -8,7 +8,7 @@ import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 
-class App extends Component {
+class App extends PureComponent {
   //state is managed from inside component. only available in components that extend component
   //use state with care! using it too much makes it unpredictable as it scales.
   //If state changes, it will lead react to update the DOM.
@@ -35,6 +35,25 @@ class App extends Component {
 
   componentDidMount(){
     console.log('App.js inside did mount.');
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("UPDATE app.JS ; INSIDE componentWillReceiveProps", nextProps);
+  }
+
+ // shouldComponentUpdate(nextProps, nextState) {
+   // console.log('UPDATE app.JS ; INSIDE shouldComponentUpdate');
+   // return nextProps.persons !== this.props.persons || 
+     //     nextState.showPersons !== this.state.showPersons;
+//
+ // }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log('UPDATE app.JS ; Inside componentWillUpdate', nextProps, nextState);
+  }
+
+  componentDidUpdate() {
+    console.log('app.JS ; Inside componentDidUpdate');
   }
   /** Setting state like this only works in modern projects.
   state = {
@@ -115,6 +134,8 @@ class App extends Component {
 
   };
 
+  
+
   render() {
     console.log('App.js inside render.');
     //DOES NOT ALLOW FOR PSEUDOSELECTORS
@@ -180,6 +201,7 @@ class App extends Component {
     //transformation. RADIUM ONLY.
     return (
         <div className={classes.App}>
+          <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
           <Cockpit 
             showPersons={this.state.showPersons}
             persons={this.state.persons}

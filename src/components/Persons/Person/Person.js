@@ -20,6 +20,10 @@ class Person extends Component {
         console.log('Person.js inside did mount.');
     }
 
+    componentWillReceiveProps(nextProps){
+        console.log("UPDATE PERSONS.JS ; INSIDE componentWillReceiveProps", nextProps);
+    }
+
     render(){
         return(
             <div className={classes.Person}>
